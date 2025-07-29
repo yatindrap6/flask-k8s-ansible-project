@@ -1,0 +1,21 @@
+- name: Build, Push, and Deploy Flask App to Kubernetes
+  hosts: localhost
+  tasks:
+    - name: Build Docker image (shell)
+      shell: docker build -t yatindrap6/flask-k8s-app:latest .
+      args:
+        chdir: "{{ playbook_dir }}/.."
+
+    - name: Push Docker image (shell)
+      shell: docker push yatindrap6/flask-k8s-app:latest
+
+    - name: Apply Deployment YAML
+      shell: kubectl apply -f k8s/deployment.yaml
+      args:
+        chdir: "{{ playbook_dir }}/.."
+
+    - name: Apply Service YAML
+      shell: kubectl apply -f k8s/service.yaml
+      args:
+        chdir: "{{ playbook_dir }}/.."
+
